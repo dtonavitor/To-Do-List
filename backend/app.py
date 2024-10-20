@@ -91,7 +91,7 @@ def login_user():
         access_token = create_access_token(identity=user_id)
         
         redis_client.delete(f"login_attempts:{ip_address}")
-        return {'access_token': access_token}, 200
+        return {'access_token': access_token, 'user_id': user_id}, 200
       
     except UnauthorizedError as e:
         redis_client.incr(f"login_attempts:{ip_address}")
@@ -170,7 +170,6 @@ def get_tasks(user_id):
           
         cache_key = f"tasks:{user_id}"
         cached_tasks = redis_client.get(cache_key)
-        print(cached_tasks)
         
         if cached_tasks:
             tasks = json.loads(cached_tasks)
@@ -190,7 +189,7 @@ def get_tasks(user_id):
         logger.error(traceback.format_exc())
         return {'error': 'Erro ao buscar tarefas'}, 500 
   
-@app.route('/task/', methods=['POST'])
+@app.route('/task', methods=['POST'])
 @jwt_required()
 def create_task():
     try:
@@ -227,7 +226,7 @@ def create_task():
         redis_client.delete(f"tasks:{user_id}")
         
         return {'task_id': task_id}, 201
-    except UnauthorizedError as e:
+    except (InvalidTokenError, UnauthorizedError) as e:
       logger.error(e)
       logger.error(traceback.format_exc())
       return {'error': e.message}, 403
