@@ -11,6 +11,9 @@ from flask_redis import FlaskRedis
 from Errors import EmptyFieldError, InvalidFieldError, ResponseError, InvalidTokenError, UnauthorizedError, DuplicateFieldError, MissingFieldError, UserNotFoundError
 from Users import Users
 from Tasks import Tasks
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -362,4 +365,4 @@ def update_task_status(task_id):
         return {'error': 'Erro ao atualizar status da tarefa'}, 500
   
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
