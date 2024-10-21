@@ -223,6 +223,7 @@ const create_task = () => {
       if (this.readyState == 4) {
         if (this.status == 201) {
           alert('Tarefa criada com sucesso');
+          window.location.reload();
         } else {
           const response = JSON.parse(this.responseText);
           if (response.error) {
@@ -268,6 +269,7 @@ const update_task = () => {
       if (this.readyState == 4) {
         if (this.status == 200) {
           alert('Tarefa atualizada com sucesso');
+          window.location.reload();
         } else {
           const response = JSON.parse(this.responseText);
           if (response.error) {
